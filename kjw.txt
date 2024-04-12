@@ -1,0 +1,60 @@
+ programs.py
+
+from collections import deque
+
+# 2. Najdłuższy spójny podciąg rosnący ciągu n liczb całkowitych:
+sequence = [5, 2, 8, 6, 3, 6, 9, 7, 4]
+longest_subsequence = [sequence[i:j] for i in range(len(sequence)) for j in range(i+1, len(sequence)+1) if sequence[i:j] == sorted(set(sequence[i:j]))]
+print("Najdłuższy spójny podciąg rosnący:", max(longest_subsequence, key=len))
+
+# 3. Miejsce zerowe metodą połowienia:
+def bisection_method(func, a, b, tol=1e-6, max_iter=1000):
+    while (b - a) / 2 > tol and max_iter > 0:
+        midpoint = (a + b) / 2
+        if func(midpoint) == 0:
+            print("Miejsce zerowe funkcji:", midpoint)
+            return midpoint
+        elif func(a) * func(midpoint) < 0:
+            b = midpoint
+        else:
+            a = midpoint
+        max_iter -= 1
+    print("Nie udało się znaleźć miejsca zerowego.")
+    return (a + b) / 2
+
+def quadratic_function(x):
+    return x**2 - 4
+
+bisection_method(quadratic_function, 0, 3)
+
+# 4. Wartość wyrażenia zapisanego w ONP:
+def evaluate_rpn(expression):
+    stack = deque()
+    for token in expression.split():
+        if token.isdigit():
+            stack.append(int(token))
+        else:
+            b, a = stack.pop(), stack.pop()
+            if token == '+':
+                stack.append(a + b)
+            elif token == '-':
+                stack.append(a - b)
+            elif token == '*':
+                stack.append(a * b)
+            elif token == '/':
+                stack.append(a / b)
+    print("Wartość wyrażenia zapisanego w ONP:", stack.pop())
+
+evaluate_rpn("3 4 + 2 *")
+
+# 5. Szybkie potęgowanie - wersja iteracyjna:
+def fast_power(base, exponent):
+    result = 1
+    while exponent:
+        if exponent & 1:
+            result *= base
+        base *= base
+        exponent >>= 1
+    print("Szybkie potęgowanie:", result)
+
+fast_power(2, 10)
